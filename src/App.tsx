@@ -4,8 +4,12 @@ import { getRandomColor, getRandomNumber } from "./utils";
 
 const NUMBER_OF_COLORS = 3;
 
+const DEFAULT_COLORS = Array.from({ length: NUMBER_OF_COLORS }, () =>
+  getRandomColor()
+);
+
 function App() {
-  const [colorOptions, setColorOptions] = useState<string[]>([]);
+  const [colorOptions, setColorOptions] = useState<string[]>(DEFAULT_COLORS);
   const [isGuessedRight, setIsGuessedRight] = useState<boolean>();
 
   const generateColors = () => {
@@ -14,6 +18,9 @@ function App() {
     setColorOptions(colors);
   };
 
+  // NOTE: in dev mode, because of the Strict Mode, this useEffect runs twice and successfully generates colors
+  // but in production, useEffect runs only once and not generate any colors.
+  // i have no fucking idea
   useEffect(() => generateColors, []);
 
   const colorToGuess =
