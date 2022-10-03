@@ -10,11 +10,14 @@ const DEFAULT_COLORS = Array.from({ length: NUMBER_OF_COLORS }, () =>
 
 function App() {
   const [colorOptions, setColorOptions] = useState<string[]>(DEFAULT_COLORS);
+  const [colorToGuess, setColorToGuess] = useState<string>(DEFAULT_COLORS[0]);
   const [isGuessedRight, setIsGuessedRight] = useState<boolean>();
 
   const generateColors = () => {
     const colors = Array.from({ length: NUMBER_OF_COLORS }, getRandomColor);
+    const color = colors[getRandomNumber(0, colors.length - 1)];
 
+    setColorToGuess(color);
     setColorOptions(colors);
   };
 
@@ -23,9 +26,6 @@ function App() {
   // i have no fucking idea
   useEffect(() => generateColors, []);
 
-  const colorToGuess =
-    colorOptions[getRandomNumber(0, colorOptions.length - 1)];
-
   const guessTheColor = (color: string) => {
     const isRight = color === colorToGuess;
 
@@ -33,6 +33,8 @@ function App() {
 
     if (isRight) {
       generateColors();
+    } else {
+      setColorOptions((colors) => colors.filter((_color) => _color !== color));
     }
   };
 
